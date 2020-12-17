@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+  <script type="text/javascript" src="lib/d3.v4.min.js"></script>
+  <!--CSS styling for map elements:-->
+  <style>
+    .mapSVG {
+      background-color: rgb(250, 250, 250);
+    }
+    .municipality {
+      fill: rgb(255, 240, 214);
+      stroke: rgb(255, 159, 227);
+    }
+  </style>
+</head>
+<body>
+<svg class="mapSVG"></svg>
+<script type="text/javascript">
+    var mapWidth = 400, mapHeight = 350;
+    var mapSVG = d3.select("svg")
+        .attr("width", mapWidth)
+        .attr("height", mapHeight);
+    // Define Mercator proj to center at data (lon-lat):
+    var myProj = d3.geoMercator()
+        .center([6.0, 52.5])
+        .scale(10000)
+        .translate([mapWidth / 2, mapHeight / 2]);
+    //Define svg path generator using the projection
+    var svgpath = d3.geoPath().projection(myProj);
+    // asynchronously load geojson:
+    d3.json("data/overijssel.json", function (error, geojson) {
+            mapSVG.selectAll("path")
+                .data(geojson.features).enter()
+            // for each d create an svgpath that uses the geoPath generator:
+                .append("path")
+                .attr("class", "municipality")
+                .attr("d", svgpath);
+        } //end of callback function
+    ); //end of d3.json
+</script>
+</body>
+</html>
