@@ -8,13 +8,18 @@ class Map extends Component {
   }
   componentDidMount(error, info) {
     //reading map data
-    // const readingMapData = (path = 'data/overijssel.json') => {
-      d3.json('data/overijssel.json', function (data) {
-        // console.log(error);
-        console.log(data)
-      });
-    // };
+     d3.json('data/overijssel.json').then(function (data) {
+      const map = data;
+      console.log(typeof(map))
+      console.log(map)
+      return map
+    }).catch(err => console.log(err.message));
+
     
+    // };
+    // readingMapData('data/overijssel.json', function (mapp) {
+    //   console.log(mapp.features);
+    // });
     // readingMapData();
     // console.log(mmap.features);
     // console.log(readingMapData())
@@ -46,7 +51,6 @@ class Map extends Component {
 
       const svgpath = d3.geoPath().projection(myProj);
       const map = await d3.json('data/overijssel.json');
-      console.log(map)
       mapsvg
         .selectAll('path')
         .data(map.features)
