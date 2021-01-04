@@ -63,9 +63,16 @@ class Map extends Component {
         .style('stroke', 'rgb(250, 200, 250)')
         .style('stroke-width', 2)
         //mouse events
-        .on('mouseover', mouseOverHandler)
-        .on('mouseout', mouseOutHandler)
-        .on('click', clickHandler);
+        .on('mouseover', function(d, i) {
+          d3.select(this).style('fill', 'red');
+        })
+        .on('mouseout', function(d, i) {
+          d3.select(this).style('fill', 'white');
+        })
+
+        .on('click', function(d, i) {
+          d3.select(this).scale(5000);
+        })
     };
 
     //mouse events functions

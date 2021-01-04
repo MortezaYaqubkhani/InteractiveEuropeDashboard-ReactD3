@@ -45,11 +45,12 @@ class MunicipalityMap extends Component {
 
       const myProj = d3
         .geoMercator()
-        .center([6.0, 54.5])
-        .scale(2000)
+        .center([6.0, 51.5])
+        .scale(3500)
         .translate([mapWidth / 2, mapHeight / 2]);
 
       const svgpath = d3.geoPath().projection(myProj);
+      //to load a file successfully it's coordinates should be transfered to wgs84 4326
       const map = await d3.json('data/Mun-2.geojson');
       mapsvg
         .selectAll('path')
@@ -63,14 +64,18 @@ class MunicipalityMap extends Component {
         .style('stroke', 'rgb(250, 200, 250)')
         .style('stroke-width', 2)
         //mouse events
-        .on('mouseover', mouseOverHandler)
-        .on('mouseout', mouseOutHandler)
+        .on('mouseover', function(d, i) {
+          d3.select(this).style('fill', 'red');
+        })
+        .on('mouseout', function(d, i) {
+          d3.select(this).style('fill', 'white');
+        })
         .on('click', clickHandler);
     };
 
     //mouse events functions
     const mouseOverHandler = (d, i) => {
-      console.log('mouseover');
+      // d3.select(this).style('fill', 'red')
     };
 
     const clickHandler = () => {
