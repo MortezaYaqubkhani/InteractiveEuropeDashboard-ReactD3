@@ -8,14 +8,15 @@ class Map extends Component {
   }
   componentDidMount(error, info) {
     //reading map data
-     d3.json('data/overijssel.json').then(function (data) {
-      const map = data;
-      console.log(typeof(map))
-      console.log(map)
-      return map
-    }).catch(err => console.log(err.message));
+    d3.json('data/overijssel.json')
+      .then(function (data) {
+        const map = data;
+        console.log(typeof map);
+        console.log(map);
+        return map;
+      })
+      .catch((err) => console.log(err.message));
 
-    
     // };
     // readingMapData('data/overijssel.json', function (mapp) {
     //   console.log(mapp.features);
@@ -25,8 +26,24 @@ class Map extends Component {
     // console.log(readingMapData())
     // const mapp = readingMapData();
     // console.log(mapp.features)
-    const mapWidth = 350,
-      mapHeight = 400;
+    const mapWidth = 600,
+      mapHeight = 1200;
+
+    // A function to set the projection
+    const coordProjection = (
+      translateX,
+      translateY,
+      scale = 27000,
+      lat = 6,
+      long = 52.5
+    ) => {
+      const myProjection = d3
+        .geoMercator()
+        .center([lat, long])
+        .scale(scale)
+        .translate([translateX, translateY]);
+      return d3.geoPath().projection(myProjection);
+    };
 
     const provinceMap = async (
       where = this.thismap.current,
@@ -35,23 +52,30 @@ class Map extends Component {
       scale
     ) => {
       console.log('this is province map');
-      const mapsvg = d3
+
+      let mapsvg2 = d3
+      .select(where)
+      .append('svg')
+      .attr('width', `300px`)
+      .attr('height', `300px`)
+      .attr('transform', `translate(0, -10)`)
+      .style('border', '2px solid black')
+      .append('g')
+
+
+      let mapsvg = d3
         .select(where)
         .append('svg')
         .attr('width', `${mapHeight}px`)
         .attr('height', `${mapWidth}px`)
-        .style('border', '1px solid black')
+        .style('border', '2px solid black')
         .append('g');
 
-      const myProj = d3
-        .geoMercator()
-        .center([6.0, 52.5])
-        .scale(10000)
-        .translate([mapWidth / 2, mapHeight / 2]);
-
-      const svgpath = d3.geoPath().projection(myProj);
+      let svgpath = coordProjection(mapWidth, mapHeight / 2 - 300);
+      let svgpath1 = coordProjection(50, 80, 7000);
       const map = await d3.json('data/overijssel.json');
-      mapsvg
+
+      let prov = mapsvg
         .selectAll('path')
         .data(map.features)
         .enter()
@@ -63,16 +87,75 @@ class Map extends Component {
         .style('stroke', 'rgb(250, 200, 250)')
         .style('stroke-width', 2)
         //mouse events
-        .on('mouseover', function(d, i) {
+        .on('mouseover', function (d, i) {
           d3.select(this).style('fill', 'red');
         })
-        .on('mouseout', function(d, i) {
+        .on('mouseout', function (d, i) {
           d3.select(this).style('fill', 'white');
         })
 
-        .on('click', function(d, i) {
-          d3.select(this).scale(5000);
-        })
+        .on('click', function (d, i) {
+          //the layer shoud be off
+
+          //this remove works but not perfect, and it works good to remove all the shapes
+          // mapsvg.selectAll('path').remove();
+          prov.remove();
+          //this also works to change the whole color of the shape
+          // mapsvg.selectAll('path').transition().style('fill', 'red');
+
+          // .style('border', '20px solid black')
+          //   .attr('width', `1000px`)
+          // .attr('height', `1000px`)
+
+          svgpath = coordProjection(50, 80, 7000);
+          // const mapsvg = d3
+          // .select(where)
+          // .append('svg')
+          // .attr('width', `${mapHeight}px`)
+          // .attr('height', `${mapWidth}px`)
+          // .style('border', '1px solid black')
+          // .append('g');
+          let mapsvg = d3
+            .select(where)
+            .append('svg')
+            .attr('width', `200px`)
+            .attr('height', `300px`)
+            .style('border', '2px solid black')
+            .append('g')
+            .selectAll('path')
+            .data(map.features)
+            .enter()
+            // for each d create an svgpath that uses the geoPath generator:
+            .append('path')
+            //   .attr('class', 'municipality')
+            .attr('d', svgpath)
+            .style('fill', 'white')
+            .style('stroke', 'rgb(250, 200, 250)')
+            .style('stroke-width', 2);
+
+          // mapsvg.transition()
+          // .duration(500).style('fill', 'white')
+          //redraw the same layer in other place with the smaller scale
+          // d3.select(this).scale(5000);
+        });
+      let mapsvg1 = d3
+        .select(where)
+        .append('svg')
+        .attr('width', `200px`)
+        .attr('height', `300px`)
+        .attr('transform', `translate(0, -10)`)
+        .style('border', '2px solid black')
+        .append('g')
+        .selectAll('path')
+        .data(map.features)
+        .enter()
+        // for each d create an svgpath that uses the geoPath generator:
+        .append('path')
+        //   .attr('class', 'municipality')
+        .attr('d', svgpath)
+        .style('fill', 'white')
+        .style('stroke', 'rgb(250, 200, 250)')
+        .style('stroke-width', 2);
     };
 
     //mouse events functions
