@@ -111,7 +111,7 @@ class MunicipalityMap extends Component {
   render() {
     return (
       <div>
-        <p>this is the map section</p>
+        <p>this is the map mun section</p>
         <div ref={this.thismap}></div>
       </div>
     );

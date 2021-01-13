@@ -44,3 +44,15 @@
   fill: rgb(255, 240, 214);
   stroke: rgb(255, 159, 227);
 }
+
+.border {
+  border:'2px solid #000000'
+}
+
+.world {
+  height: 75vh;
+}
+
+.small {
+  height: 25vh;
+}

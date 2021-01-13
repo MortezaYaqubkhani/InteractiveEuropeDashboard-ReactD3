@@ -8,14 +8,16 @@ class Map2 extends Component {
   }
   componentDidMount(error, info) {
     //reading map data
-     d3.json('data/geoserver.json').then(function (data) {
-      const map = data;
-      console.log(typeof(map))
-      console.log(map)
-      return map
-    }).catch(err => console.log(err.message));
+    d3.json('data/geoserver.json')
+      .then(function (data) {
+        const map = data;
+        console.log(typeof map);
+        console.log(map);
+        return map;
+      })
+      .catch((err) => console.log(err.message));
+    // const data = await this.props.data;
 
-    
     // };
     // readingMapData('data/overijssel.json', function (mapp) {
     //   console.log(mapp.features);
@@ -50,7 +52,7 @@ class Map2 extends Component {
         .translate([mapWidth / 2, mapHeight / 2]);
 
       const svgpath = d3.geoPath().projection(myProj);
-      const map = await d3.json('data/geoserver.json');
+      const map = await this.props.data;
       mapsvg
         .selectAll('path')
         .data(map.features)
@@ -100,13 +102,13 @@ class Map2 extends Component {
     const removeMap = (where) => {
       d3.select(where).selectAll('path').remove();
     };
-    provinceMap();
+    // provinceMap();
   }
 
   render() {
     return (
       <div>
-        <p>this is the map section</p>
+        <p>this is the map2 section</p>
         <div ref={this.thismap}></div>
       </div>
     );
