@@ -4,21 +4,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Row, Col} from 'react-bootstrap';
 import datamap from './component/data/overijssel.json';
 import datamap1 from './component/data/geoserver.json';
+import Box from './component/box';
 import * as d3 from 'd3';
 import ReactDOM from 'react-dom';
 import Map from './component/map';
 import MapBoston from './component/mapBoston';
 import Map2 from './component/data/map2';
 import MunicipalityMap from './component/municipalityMap';
-
-// for measuring size of the window
-const measureElement = (element) => {
-  const DOMNode = ReactDOM.findDOMNode(element);
-  return {
-    width: DOMNode.offsetWidth,
-    height: DOMNode.offsetHeight,
-  };
-};
+import Boxfunction from './component/boxfunction';
+import Boxfunction1 from './component/boxfunction1';
 
 class App extends Component {
   constructor(props) {
@@ -58,17 +52,19 @@ class App extends Component {
     // }
     // this.setState({worldData: loadWorldData()});
     // console.log(this.state.worldData);
-    this.content &&
-      this.setState({
-        contentHeight: measureElement(this.content).height,
-        contentWidht: measureElement(this.content).width,
-      });
-    console.log(this.state.contentHeight);
+    // this.content &&
+    //   this.setState({
+    //     contentHeight: measureElement(this.content).height,
+    //     contentWidht: measureElement(this.content).width,
+    //   });
+    // console.log(this.state.contentHeight);
     if ('ResizeObserver' in window) {
       this.observe(ResizeObserver);
     } else {
       import('resize-observer-polyfill').then(this.observe);
     }
+
+
   }
 
   componentWillUnmount() {
@@ -89,26 +85,27 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.state.contentHeight);
+    const window = {width: this.state.width, height: this.state.height};
     return (
       <div className="App">
-        <Container className="border" border="primary">
+        <Container className="container border" border="primary" ref={this.resizeSubject}>
           <Row>
             <Col xs={3}>
-              <Row className="border small" ref={this.resizeSubject}>
-                {this.state.width} x {this.state.height}
+              <Row className="border small">
+                {/* <MunicipalityMap window={window.width/4, window.height/4} /> */}
+                <Boxfunction1 height={1} width={window.width/4} />
               </Row>
-              <Row className="border small">Country</Row>
-              <Row className="border small">Province</Row>
+              <Row className="border small">
+              {/* <Boxfunction height={this.height/4} width={window.width/4} /> */}
+              </Row>
+              <Row className="border small">
+              </Row>
             </Col>
-            <Col
-              className="border world"
-              xs={9}
-              ref={(r) => (this.content = r)}
-            >
-              {this.state.contentWidht}
+            <Col className="border world" xs={9}>
+              <MunicipalityMap />
             </Col>
           </Row>
+
           <Row className="border">
             <Col className="border small" xs={3}>
               Country
@@ -117,14 +114,14 @@ class App extends Component {
               province
             </Col>
             <Col className="border small" xs={3}>
-              City
+              {window.height}
             </Col>
             <Col className="border small" xs={3} border="primary">
-              City-map
+              {window.width}
             </Col>
           </Row>
         </Container>
-        <div className="world">{/* <Map data={this.state.worldData} /> */}</div>
+
         {/* <Map2 data={this.state.worldData} />
         <MunicipalityMap />
         <MapBoston /> */}

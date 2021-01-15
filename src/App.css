@@ -46,7 +46,7 @@
 }
 
 .border {
-  border:'2px solid #000000'
+  border: '2px solid #000000';
 }
 
 .world {
@@ -55,4 +55,8 @@
 
 .small {
   height: 25vh;
+}
+
+.container {
+  height: 100vh;
 }

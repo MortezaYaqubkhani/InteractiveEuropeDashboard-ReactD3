@@ -4,18 +4,26 @@ import * as d3 from 'd3';
 class MunicipalityMap extends Component {
   constructor(props) {
     super(props);
-    this.thismap = React.createRef();
   }
-  componentDidMount(error, info) {
+  resizeObserver = null;
+  thismap = createRef();
+  state = {};
+  async componentDidMount(error, info) {
     //reading map data
-     d3.json('data/Mun-2.geojson').then(function (data) {
-      const map = data;
-      console.log(typeof(map))
-      console.log(map)
-      return map
-    }).catch(err => console.log(err.message));
+    // d3.json('data/Mun-2.geojson')
+    //   .then(function (data) {
+    //     const map = data;
+    //     console.log(typeof map);
+    //     console.log(map);
+    //     return map;
+    //   })
+    //   .catch((err) => console.log(err.message));
 
-    
+    if ('ResizeObserver' in window) {
+      this.observe(ResizeObserver);
+    } else {
+      import('resize-observer-polyfill').then(this.observe);
+    }
     // };
     // readingMapData('data/overijssel.json', function (mapp) {
     //   console.log(mapp.features);
@@ -25,21 +33,21 @@ class MunicipalityMap extends Component {
     // console.log(readingMapData())
     // const mapp = readingMapData();
     // console.log(mapp.features)
-    const mapWidth = 350,
-      mapHeight = 400;
 
-    const provinceMap = async (
-      where = this.thismap.current,
-      height,
-      width,
-      scale
-    ) => {
-      console.log('this is province map');
+    const width = 400;
+    const height = 400
+
+    // const provinceMap = async (
+    //   where = this.thismap.current,
+    //   height = mapHeight,
+    //   width = mapWidth
+    // ) => {
+    //   console.log('this is province map');
       const mapsvg = d3
-        .select(where)
+        .select(this.thismap.current)
         .append('svg')
-        .attr('width', `${mapHeight}px`)
-        .attr('height', `${mapWidth}px`)
+        .attr('width', `${height}px`)
+        .attr('height', `${width}px`)
         .style('border', '1px solid black')
         .append('g');
 
@@ -47,11 +55,11 @@ class MunicipalityMap extends Component {
         .geoMercator()
         .center([6.0, 51.5])
         .scale(3500)
-        .translate([mapWidth / 2, mapHeight / 2]);
+        .translate([width / 2, height / 2]);
 
       const svgpath = d3.geoPath().projection(myProj);
       //to load a file successfully it's coordinates should be transfered to wgs84 4326
-      const map = await d3.json('data/Mun-2.geojson');
+      const map = await d3.json('data/overijssel.json');
       mapsvg
         .selectAll('path')
         .data(map.features)
@@ -64,56 +72,38 @@ class MunicipalityMap extends Component {
         .style('stroke', 'rgb(250, 200, 250)')
         .style('stroke-width', 2)
         //mouse events
-        .on('mouseover', function(d, i) {
+        .on('mouseover', function (d, i) {
           d3.select(this).style('fill', 'red');
         })
-        .on('mouseout', function(d, i) {
+        .on('mouseout', function (d, i) {
           d3.select(this).style('fill', 'white');
-        })
-        .on('click', clickHandler);
+        });
+      // provinceMap();
+      console.log(width)
     };
-
-    //mouse events functions
-    const mouseOverHandler = (d, i) => {
-      // d3.select(this).style('fill', 'red')
-    };
-
-    const clickHandler = () => {
-      //1- remove the main map
-      //2- change it to the up left
-      //3- draw a new small map
-      //4- draom a new map for the next level, based on the selected polygone
-      console.log('click');
-
-      d3.select(this.thismap.current).selectAll('path').remove();
-      // mapsvg
-      //   .append('rect')
-      //   .attr('width', `${20}px`)
-      //   .attr('height', `${20}px`)
-      //   .style('border', '1px solid black')
-      //   .attr('transform', `translate(${0}, ${0})`);
-    };
-
-    const mouseOutHandler = () => {
-      console.log('mouseout');
-    };
-
-    // asynchronously load geojson:
-    //reading data
-
-    // console.log(map.features);
-    const removeMap = (where) => {
-      d3.select(where).selectAll('path').remove();
-    };
-    provinceMap();
+  
+  componentWillUnmount() {
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   }
+
+  observe = (RO) => {
+    this.resizeObserver = new RO((entries) => {
+      const {width, height, top, right, bottom, left} = entries[0].contentRect;
+      this.setState({width, height, top, right, bottom, left});
+    });
+
+    if (this.thismap.current) {
+      this.resizeObserver.observe(this.thismap.current);
+    }
+  };
 
   render() {
     return (
-      <div>
-        <p>this is the map mun section</p>
+      
         <div ref={this.thismap}></div>
-      </div>
+      
     );
   }
 }
