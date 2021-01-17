@@ -28,7 +28,7 @@ export default function Boxfunction({width, height}) {
 
     const svgpath = d3.geoPath().projection(myProj);
     //to load a file successfully it's coordinates should be transfered to wgs84 4326
-    const map = await d3.json('data/overijssel.json');
+    const map = await d3.json('data/ov.json');
     mapsvg1
       .selectAll('path')
       .data(map.features)

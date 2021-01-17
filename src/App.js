@@ -24,7 +24,8 @@ class App extends Component {
     worldData: {},
     country: {name: '', data: ''},
     province: {name: '', data: ''},
-    city: {name: '', data: ''},
+    // city: {name: '', data: ''},
+    nameofcity: '',
     //for screen size
     contentHeight: 0,
     contentWidht: 0,
@@ -84,7 +85,12 @@ class App extends Component {
     }
   };
 
+  handleCity = city => {
+    this.setState({nameofcity: city})
+  }
+
   render() {
+    console.log(this.state.nameofcity)
     const window = {width: this.state.width, height: this.state.height};
     return (
       <div className="App">
@@ -93,7 +99,7 @@ class App extends Component {
             <Col xs={3}>
               <Row className="border small">
                 {/* <MunicipalityMap window={window.width/4, window.height/4} /> */}
-                <Boxfunction1 height={1} width={window.width/4} />
+                <Boxfunction1 city={this.state.nameofcity} height={1} width={window.width/4} />
               </Row>
               <Row className="border small">
               {/* <Boxfunction height={this.height/4} width={window.width/4} /> */}
@@ -102,13 +108,13 @@ class App extends Component {
               </Row>
             </Col>
             <Col className="border world" xs={9}>
-              <MunicipalityMap />
+              <MunicipalityMap cityName={this.handleCity}/>
             </Col>
           </Row>
 
           <Row className="border">
             <Col className="border small" xs={3}>
-              Country
+              {this.state.nameofcity}
             </Col>
             <Col className="border small" xs={3}>
               province
