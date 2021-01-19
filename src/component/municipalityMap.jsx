@@ -1,5 +1,6 @@
 import React, {Component, createRef} from 'react';
 import * as d3 from 'd3';
+import * as turf from '@turf/turf';
 
 class MunicipalityMap extends Component {
   constructor(props) {
@@ -20,9 +21,9 @@ class MunicipalityMap extends Component {
     //   })
     //   .catch((err) => console.log(err.message));
     const handle = (name) => {
-      console.log(name)
-      this.handleclick(name)
-    }
+      console.log(name);
+      this.handleclick(name);
+    };
     if ('ResizeObserver' in window) {
       this.observe(ResizeObserver);
     } else {
@@ -39,7 +40,7 @@ class MunicipalityMap extends Component {
     // console.log(mapp.features)
 
     const width = 400;
-    const height = 400
+    const height = 400;
 
     // const provinceMap = async (
     //   where = this.thismap.current,
@@ -47,59 +48,54 @@ class MunicipalityMap extends Component {
     //   width = mapWidth
     // ) => {
     //   console.log('this is province map');
-      const mapsvg = d3
-        .select(this.thismap.current)
-        .append('svg')
-        .attr('width', `${height}px`)
-        .attr('height', `${width}px`)
-        .style('border', '1px solid black')
-        .append('g');
+    const mapsvg = d3
+      .select(this.thismap.current)
+      .append('svg')
+      .attr('width', `${height}px`)
+      .attr('height', `${width}px`)
+      .style('border', '1px solid black')
+      .append('g');
 
-      const myProj = d3
-        .geoMercator()
-        .center([6.0, 52.5])
-        .scale(10000)
-        .translate([width / 2, height / 2]);
+    const map = await d3.json('data/overijssel.json');
+    
+    const myProj = d3
+      .geoMercator()
+      .center(turf.centroid(map).geometry.coordinates)
+      .scale(10000)
+      .translate([width / 2, height / 2]);
 
-      const svgpath = d3.geoPath().projection(myProj);
-      //to load a file successfully it's coordinates should be transfered to wgs84 4326
-      const map = await d3.json('data/overijssel.json');
-      let mapfeatuer = {}
-      for (let feature of map.features) {
-        // console.log(feature)
-        if (feature.properties.gm_naam === 'Enschede') {
-          mapfeatuer = feature
-        }
-      }
-      console.log(mapfeatuer)
-      mapsvg
-        .selectAll('path')
-        .data(map.features)
-        .enter()
-        // for each d create an svgpath that uses the geoPath generator:
-        .append('path')
-        //   .attr('class', 'municipality')
-        .attr('d', svgpath)
-        .style('fill', 'black')
-        .style('stroke', 'rgb(250, 200, 250)')
-        .style('stroke-width', 2)
-        //mouse events
-        .on('mouseover', function (d, i) {
-          d3.select(this).style('fill', 'red');
-          handle(i.properties.gm_naam)
-        })
-        .on('mouseout', function (d, i) {
-          d3.select(this).style('fill', 'white');
-        })
-        .on('click', function (d,i) {
-          console.log(i.properties.gm_naam)
-        });
+    const svgpath = d3.geoPath().projection(myProj);
+    //to load a file successfully it's coordinates should be transfered to wgs84 4326
+    let mapfeatuer = {};
 
-      
-      // provinceMap();
-      console.log(map.features)
-    };
-  
+    console.log(mapfeatuer);
+    mapsvg
+      .selectAll('path')
+      .data(map.features)
+      .enter()
+      // for each d create an svgpath that uses the geoPath generator:
+      .append('path')
+      //   .attr('class', 'municipality')
+      .attr('d', svgpath)
+      .style('fill', 'black')
+      .style('stroke', 'rgb(250, 200, 250)')
+      .style('stroke-width', 2)
+      //mouse events
+      .on('mouseover', function (d, i) {
+        d3.select(this).style('fill', 'red');
+        handle(i.properties.gm_naam);
+      })
+      .on('mouseout', function (d, i) {
+        d3.select(this).style('fill', 'white');
+      })
+      .on('click', function (d, i) {
+        console.log(i.properties.gm_naam);
+      });
+
+    // provinceMap();
+    console.log(map.features);
+  }
+
   componentWillUnmount() {
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
@@ -117,16 +113,15 @@ class MunicipalityMap extends Component {
     }
   };
 
-  handleclick = (name) =>{
-    this.props.cityName(name)
-  }
-
+  handleclick = (name) => {
+    this.props.cityName(name);
+  };
+  handle = (name) => {
+    console.log(name);
+    this.handleclick(name);
+  };
   render() {
-    return (
-      
-        <div ref={this.thismap}></div>
-      
-    );
+    return <div ref={this.thismap}></div>;
   }
 }
 

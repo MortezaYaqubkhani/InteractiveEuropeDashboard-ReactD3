@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 import * as turf from '@turf/turf'
 
-export default function Boxfunction1({city, width, height}) {
+export default function SmallProvince({city, width, height}) {
   const svgRef = useRef();
 
   useEffect(() => {
@@ -30,21 +30,21 @@ export default function Boxfunction1({city, width, height}) {
         }
     const myProj = d3
       .geoMercator()
-      .center(centroid ? centroid.geometry.coordinates : [0, 0])
-      .scale(15000)
+      .center(turf.centroid(map).geometry.coordinates)
+      .scale(5800)
       .translate([width / 2, width / 2]);
 
     const svgpath = d3.geoPath().projection(myProj);
     //to load a file successfully it's coordinates should be transfered to wgs84 4326
         mapsvg
         .selectAll('path')
-        .data([mapfeatuer])
+        .data(map.features)
         .enter()
         // for each d create an svgpath that uses the geoPath generator:
         .append('path')
         //   .attr('class', 'municipality')
         .attr('d', svgpath)
-        .style('fill', 'rgb(250, 200, 250)')
+        .style('fill', '{rgb(250, 200, 250)}')
         .style('stroke', 'rgb(250, 200, 250)')
         .style('stroke-width', 2);
     })

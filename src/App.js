@@ -13,6 +13,7 @@ import Map2 from './component/data/map2';
 import MunicipalityMap from './component/municipalityMap';
 import Boxfunction from './component/boxfunction';
 import Boxfunction1 from './component/boxfunction1';
+import SmallProvince from './component/smallProvince';
 
 class App extends Component {
   constructor(props) {
@@ -22,8 +23,9 @@ class App extends Component {
   resizeSubject = createRef();
   state = {
     worldData: {},
-    country: {name: '', data: ''},
-    province: {name: '', data: ''},
+    country: {over: '', select: '', data: ''},
+    province: {over: '', select: '', data: ''},
+    city: {over: '', select: '', data: ''},
     // city: {name: '', data: ''},
     nameofcity: '',
     //for screen size
@@ -64,8 +66,6 @@ class App extends Component {
     } else {
       import('resize-observer-polyfill').then(this.observe);
     }
-
-
   }
 
   componentWillUnmount() {
@@ -85,30 +85,44 @@ class App extends Component {
     }
   };
 
-  handleCity = city => {
-    this.setState({nameofcity: city})
-  }
+  handleCity = (city) => {
+    this.setState({nameofcity: city});
+  };
 
   render() {
-    console.log(this.state.nameofcity)
+    console.log(this.state.nameofcity);
     const window = {width: this.state.width, height: this.state.height};
     return (
       <div className="App">
-        <Container className="container border" border="primary" ref={this.resizeSubject}>
+        <Container
+          className="container border"
+          border="primary"
+          ref={this.resizeSubject}
+        >
           <Row>
-            <Col xs={3}>
-              <Row className="border small">
+            <Col id="small-maps" xs={3}>
+              <Row id="world-small-map" className="border small">
                 {/* <MunicipalityMap window={window.width/4, window.height/4} /> */}
-                <Boxfunction1 city={this.state.nameofcity} height={1} width={window.width/4} />
+
+                <Boxfunction1
+                  city={this.state.nameofcity}
+                  height={1}
+                  width={window.width / 4}
+                />
               </Row>
-              <Row className="border small">
-              {/* <Boxfunction height={this.height/4} width={window.width/4} /> */}
+              <Row id="country-small-map" className="border small">
+                {/* <Boxfunction height={this.height/4} width={window.width/4} /> */}
               </Row>
-              <Row className="border small">
+              <Row id="province-small-map" className="border small">
+                <SmallProvince
+                  city={this.state.nameofcity}
+                  height={1}
+                  width={window.width / 4}
+                />
               </Row>
             </Col>
             <Col className="border world" xs={9}>
-              <MunicipalityMap cityName={this.handleCity}/>
+              <MunicipalityMap cityName={this.handleCity} />
             </Col>
           </Row>
 
