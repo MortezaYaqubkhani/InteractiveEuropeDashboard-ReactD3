@@ -14,6 +14,8 @@ import MunicipalityMap from './component/municipalityMap';
 import Boxfunction from './component/boxfunction';
 import Boxfunction1 from './component/boxfunction1';
 import SmallProvince from './component/smallProvince';
+import MainWorld from './component/MainWorld';
+import SmallWorld from './component/smallWorld';
 
 class App extends Component {
   constructor(props) {
@@ -22,8 +24,9 @@ class App extends Component {
   resizeObserver = null;
   resizeSubject = createRef();
   state = {
+    mainWindow: 'worldMap',
     worldData: {},
-    country: {over: '', select: '', data: ''},
+    country: '',
     province: {over: '', select: '', data: ''},
     city: {over: '', select: '', data: ''},
     // city: {name: '', data: ''},
@@ -89,9 +92,32 @@ class App extends Component {
     this.setState({nameofcity: city});
   };
 
+  handleCountry = (country) => {
+    country = country;
+    this.setState({country});
+    console.log(country);
+    //to change the main window map
+    this.setState({mainWindow: 'countryMap'});
+    // this.setState({nameofcity: city});
+  };
+
+  handleSmallWorld = (country) => {
+    //set the main window
+    this.setState({mainWindow: 'worldMap'});
+    //earse the small world window
+    this.setState({country: ''});
+    // this.setState({nameofcity: city});
+  };
+
   render() {
-    console.log(this.state.nameofcity);
     const window = {width: this.state.width, height: this.state.height};
+    const country = this.state.country;
+    const mainWindow = this.state.mainWindow;
+    const mWidth = 490;
+    const mHeight = 520;
+    const sWidth = 170;
+    const sHeight = 160;
+
     return (
       <div className="App">
         <Container
@@ -102,13 +128,23 @@ class App extends Component {
           <Row>
             <Col id="small-maps" xs={3}>
               <Row id="world-small-map" className="border small">
-                {/* <MunicipalityMap window={window.width/4, window.height/4} /> */}
+                {country ? (
+                  <SmallWorld
+                    handleClick={this.handleSmallWorld}
+                    country={country}
+                    width={sWidth}
+                    height={sHeight}
+                  />
+                ) : (
+                  <p></p>
+                )}
+                {/* <MunicipalityMap window={window.width/4, window.height/4} />
 
                 <Boxfunction1
                   city={this.state.nameofcity}
                   height={1}
                   width={window.width / 4}
-                />
+                /> */}
               </Row>
               <Row id="country-small-map" className="border small">
                 {/* <Boxfunction height={this.height/4} width={window.width/4} /> */}
@@ -122,7 +158,17 @@ class App extends Component {
               </Row>
             </Col>
             <Col className="border world" xs={9}>
-              <MunicipalityMap cityName={this.handleCity} />
+              {mainWindow === 'worldMap' ? (
+                <MainWorld
+                  height={mHeight}
+                  width={mWidth}
+                  countryName={this.handleCountry}
+                />
+              ) : mainWindow === 'countryMap' ? (
+                <p></p>
+              ) : (
+                <MunicipalityMap cityName={this.handleCity} />
+              )}
             </Col>
           </Row>
 
