@@ -16,6 +16,7 @@ import Boxfunction1 from './component/boxfunction1';
 import SmallProvince from './component/smallProvince';
 import MainWorld from './component/MainWorld';
 import SmallWorld from './component/smallWorld';
+import MainCountry from './component/mainCountry';
 
 class App extends Component {
   constructor(props) {
@@ -69,6 +70,7 @@ class App extends Component {
     } else {
       import('resize-observer-polyfill').then(this.observe);
     }
+
   }
 
   componentWillUnmount() {
@@ -148,6 +150,7 @@ class App extends Component {
               </Row>
               <Row id="country-small-map" className="border small">
                 {/* <Boxfunction height={this.height/4} width={window.width/4} /> */}
+                {country === 'Netherlands' ? <p>Netherlands</p> : <p>another</p>}
               </Row>
               <Row id="province-small-map" className="border small">
                 <SmallProvince
@@ -165,7 +168,12 @@ class App extends Component {
                   countryName={this.handleCountry}
                 />
               ) : mainWindow === 'countryMap' ? (
-                <p></p>
+                <MainCountry
+                  height={mHeight}
+                  width={mWidth}
+                  country={country}
+                  
+                />
               ) : (
                 <MunicipalityMap cityName={this.handleCity} />
               )}

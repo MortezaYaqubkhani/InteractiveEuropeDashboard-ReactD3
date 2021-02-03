@@ -14,7 +14,7 @@ export default function Boxfunction1({city, width, height}) {
       .select(svgRef.current)
       .append('svg')
       .attr('width', `${width}px`)
-      .attr('height', `${width}px`)
+      .attr('height', `${height}px`)
       .style('border', '2px solid black')
       .append('g');
 

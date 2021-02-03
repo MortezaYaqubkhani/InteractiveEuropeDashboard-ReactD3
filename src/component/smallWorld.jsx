@@ -41,7 +41,7 @@ export default function SmallWorld({country, width, height, handleClick}) {
         .style('stroke', 'rgb(250, 200, 250)')
         .style('stroke-width', 2)
         .on('click', function (d, i) {
-            // console.log(i.properties.admin);
+            console.log(i.properties.admin);
             handle()});
     })
     

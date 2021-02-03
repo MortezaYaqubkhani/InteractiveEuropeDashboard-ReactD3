@@ -25,6 +25,8 @@ export default function MainWorld({width, height, countryName}) {
 
     let mapfeatuer = {};
     d3.json('data/europe.json').then((map) => {
+      const bounding_box = turf.bbox(map);
+      console.log(bounding_box)
       const svgpath = PathProjection(
         turf.centroid(map).geometry.coordinates,
         700,
@@ -45,7 +47,7 @@ export default function MainWorld({width, height, countryName}) {
         .style('stroke-width', 2)
         .on('mouseover', function (d, i) {
           d3.select(this).style('fill', 'red');
-          // console.log(i.properties.admin);
+          console.log(i.properties.admin);
           // handle(i.properties.gm_naam);
         })
         .on('mouseout', function (d, i) {
