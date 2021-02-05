@@ -2,7 +2,7 @@ import React, {Component, createRef} from 'react';
 import * as d3 from 'd3';
 import * as turf from '@turf/turf';
 
-class MunicipalityMap extends Component {
+class MainProvince extends Component {
   constructor(props) {
     super(props);
   }
@@ -39,8 +39,8 @@ class MunicipalityMap extends Component {
     // const mapp = readingMapData();
     // console.log(mapp.features)
 
-    const width = 400;
-    const height = 400;
+    const width = this.props.width;
+    const height = this.props.height;
 
     // const provinceMap = async (
     //   where = this.thismap.current,
@@ -53,22 +53,30 @@ class MunicipalityMap extends Component {
       .append('svg')
       .attr('width', `${height}px`)
       .attr('height', `${width}px`)
-      .style('border', '1px solid black')
+      .style('border', '2px solid black')
       .append('g');
 
-    const map = await d3.json('data/overijssel.json');
-    
-    const myProj = d3
-      .geoMercator()
-      .center(turf.centroid(map).geometry.coordinates)
-      .scale(10000)
+    //to add background color
+    mapsvg
+      .append('rect')
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('fill', 'rgb(235, 240, 220)');
+
+      var projection = d3
+      .geoConicConformal()
+      .scale(19000) // value I would like to which when the region changes
+      .center([4.45, 50.53]) // value I would like to which when the region changes
       .translate([width / 2, height / 2]);
 
-    const svgpath = d3.geoPath().projection(myProj);
-    //to load a file successfully it's coordinates should be transfered to wgs84 4326
-    let mapfeatuer = {};
+    var svgpath = d3.geoPath().projection(projection)
 
-    console.log(mapfeatuer);
+    const map = await d3.json('data/overijssel.json');
+    projection.fitSize([height, width], map);
+
+
+
+
     mapsvg
       .selectAll('path')
       .data(map.features)
@@ -125,6 +133,6 @@ class MunicipalityMap extends Component {
   }
 }
 
-export default MunicipalityMap;
+export default MainProvince;
 
 //the next plan would be to add a mep of netherlands and assign it to the whole picture

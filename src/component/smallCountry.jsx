@@ -3,7 +3,13 @@ import * as d3 from 'd3';
 import * as turf from '@turf/turf';
 import PathProjection from './tools/pathProjection';
 
-export default function SmallWorld({country, width, height, handleClick}) {
+export default function SmallCountry({
+  country,
+  province,
+  width,
+  height,
+  handleClick,
+}) {
   const svgRef = useRef();
 
   useEffect(() => {
@@ -29,13 +35,18 @@ export default function SmallWorld({country, width, height, handleClick}) {
       .attr('height', '100%')
       .attr('fill', 'rgb(235, 240, 220)');
 
-    let mapfeatuer = {};
-    d3.json('data/europe.json').then((map) => {
-      const svgpath = PathProjection(
-        turf.centroid(map).geometry.coordinates,
-        230,
-        [height / 2 + 90, width / 2 - 30]
-      );
+    var projection = d3
+      .geoConicConformal()
+      .scale(19000) // value I would like to which when the region changes
+      .center([4.45, 50.53]) // value I would like to which when the region changes
+      .translate([width / 2, height / 2]);
+
+    var svgpath = d3.geoPath().projection(projection);
+
+    d3.json(`data/${country}.geojson`).then((map) => {
+      projection.fitSize([height, width], map);
+
+      // const svgpath = PathProjection(turf.centroid(map).geometry.coordinates, 230,[height / 2 + 90, width / 2 - 30])
 
       //to load a file successfully it's coordinates should be transfered to wgs84 4326
       mapsvg
@@ -47,7 +58,7 @@ export default function SmallWorld({country, width, height, handleClick}) {
         //   .attr('class', 'municipality')
         .attr('d', svgpath)
         .style('fill', (d, i) =>
-          d.properties.admin === country ? 'black' : 'red'
+          d.properties.name === province ? 'black' : 'red'
         )
         .style('stroke', 'rgb(250, 200, 250)')
         .style('stroke-width', 2)

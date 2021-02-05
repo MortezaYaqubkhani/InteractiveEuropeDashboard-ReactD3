@@ -10,13 +10,14 @@ import ReactDOM from 'react-dom';
 import Map from './component/map';
 import MapBoston from './component/mapBoston';
 import Map2 from './component/data/map2';
-import MunicipalityMap from './component/municipalityMap';
+import MainProvince from './component/mainProvince';
 import Boxfunction from './component/boxfunction';
 import Boxfunction1 from './component/boxfunction1';
 import SmallProvince from './component/smallProvince';
 import MainWorld from './component/MainWorld';
 import SmallWorld from './component/smallWorld';
 import MainCountry from './component/mainCountry';
+import SmallCountry from './component/smallCountry';
 
 class App extends Component {
   constructor(props) {
@@ -28,8 +29,8 @@ class App extends Component {
     mainWindow: 'worldMap',
     worldData: {},
     country: '',
-    province: {over: '', select: '', data: ''},
-    city: {over: '', select: '', data: ''},
+    province: '',
+    city: '',
     // city: {name: '', data: ''},
     nameofcity: '',
     //for screen size
@@ -70,7 +71,6 @@ class App extends Component {
     } else {
       import('resize-observer-polyfill').then(this.observe);
     }
-
   }
 
   componentWillUnmount() {
@@ -103,17 +103,36 @@ class App extends Component {
     // this.setState({nameofcity: city});
   };
 
-  handleSmallWorld = (country) => {
+  handleProvince = (province) => {
+    province = province;
+    this.setState({province});
+    console.log(province);
+    //to change the main window map
+    this.setState({mainWindow: 'provinceMap'});
+    // this.setState({nameofcity: city});
+  };
+
+  handleSmallWorld = () => {
     //set the main window
     this.setState({mainWindow: 'worldMap'});
+    //earse the country, province, and city names
+    this.setState({country: '', province: '', city: ''});
+    // this.setState({nameofcity: city});
+  };
+
+  handleSmallCountry = () => {
+    //set the main window
+    this.setState({mainWindow: 'countryMap'});
     //earse the small world window
-    this.setState({country: ''});
+    this.setState({province: '', city: ''});
     // this.setState({nameofcity: city});
   };
 
   render() {
     const window = {width: this.state.width, height: this.state.height};
     const country = this.state.country;
+    const province = this.state.province;
+
     const mainWindow = this.state.mainWindow;
     const mWidth = 490;
     const mHeight = 520;
@@ -149,8 +168,17 @@ class App extends Component {
                 /> */}
               </Row>
               <Row id="country-small-map" className="border small">
-                {/* <Boxfunction height={this.height/4} width={window.width/4} /> */}
-                {country === 'Netherlands' ? <p>Netherlands</p> : <p>another</p>}
+                {country && province ? (
+                  <SmallCountry
+                    handleClick={this.handleSmallCountry}
+                    country={country}
+                    province={province}
+                    width={sWidth}
+                    height={sHeight}
+                  />
+                ) : (
+                  <p>{province}</p>
+                )}
               </Row>
               <Row id="province-small-map" className="border small">
                 <SmallProvince
@@ -172,10 +200,14 @@ class App extends Component {
                   height={mHeight}
                   width={mWidth}
                   country={country}
-                  
+                  provinceName={this.handleProvince}
                 />
               ) : (
-                <MunicipalityMap cityName={this.handleCity} />
+                <MainProvince
+                  cityName={this.handleCity}
+                  height={mHeight}
+                  width={mWidth}
+                />
               )}
             </Col>
           </Row>

@@ -7,10 +7,10 @@ export default function MainWorld({width, height, countryName}) {
   const svgRef = useRef();
 
   useEffect(() => {
-    const handle = (admin) => {
-      console.log(admin)
-      countryName(admin)
-    }
+    const handleClick = (admin) => {
+      console.log(admin);
+      countryName(admin);
+    };
     //removing svg
     d3.select(svgRef.current).select('*').remove();
     console.log(height, width);
@@ -23,10 +23,17 @@ export default function MainWorld({width, height, countryName}) {
       .style('border', '2px solid black')
       .append('g');
 
+    //to add background color
+    mapsvg
+      .append('rect')
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('fill', 'rgb(65, 83, 83)');
+//rgb(235, 240, 220) 
     let mapfeatuer = {};
     d3.json('data/europe.json').then((map) => {
       const bounding_box = turf.bbox(map);
-      console.log(bounding_box)
+      console.log(map);
       const svgpath = PathProjection(
         turf.centroid(map).geometry.coordinates,
         700,
@@ -42,22 +49,33 @@ export default function MainWorld({width, height, countryName}) {
         .append('path')
         //   .attr('class', 'municipality')
         .attr('d', svgpath)
-        .style('fill', 'black')
-        .style('stroke', 'rgb(250, 200, 250)')
-        .style('stroke-width', 2)
+        .style('fill', 'rgb(30, 10, 10)')
+        .style('stroke', 'white')
+        .style('stroke-width', 1)
         .on('mouseover', function (d, i) {
-          d3.select(this).style('fill', 'red');
-          console.log(i.properties.admin);
-          // handle(i.properties.gm_naam);
+          d3.select(this).style('fill', 'rgb(60, 60, 60)');
+          console.log(i.properties.postal);
+          //   var mouse = d3.mouse(this);
+          //for adding the flags
+          mapsvg
+            .append('svg:image')
+            .attr('x', 10)
+            .attr('y', 10)
+            .attr('width', 50)
+            .attr('height', 50)
+            // .attr('xlink:href', "data/download.jpg");
+            .attr(
+              'xlink:href',
+              `https://www.countryflags.io/${i.properties.wb_a2.toLowerCase()}/shiny/64.png`
+            );
         })
         .on('mouseout', function (d, i) {
-          d3.select(this).style('fill', 'white');
+          d3.select(this).style('fill', 'rgb(30, 10, 10)');
         })
         .on('click', function (d, i) {
           // console.log(i.properties.admin);
-          handle(i.properties.admin);
-          
-        });;
+          handleClick(i.properties.admin);
+        });
     });
   }, [height, width]);
 
