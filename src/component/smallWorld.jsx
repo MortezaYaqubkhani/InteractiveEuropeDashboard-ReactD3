@@ -19,7 +19,7 @@ export default function SmallWorld({country, width, height, handleClick}) {
       .append('svg')
       .attr('width', `${width}px`)
       .attr('height', `${height}px`)
-      .style('border', '2px solid black')
+      // .style('border', '2px solid black')
       .append('g');
 
     //to add background color
@@ -27,7 +27,7 @@ export default function SmallWorld({country, width, height, handleClick}) {
       .append('rect')
       .attr('width', '100%')
       .attr('height', '100%')
-      .attr('fill', 'rgb(235, 240, 220)');
+      .attr('fill', 'rgb(65, 83, 83)');
 
     let mapfeatuer = {};
     d3.json('data/europe.json').then((map) => {
@@ -47,10 +47,10 @@ export default function SmallWorld({country, width, height, handleClick}) {
         //   .attr('class', 'municipality')
         .attr('d', svgpath)
         .style('fill', (d, i) =>
-          d.properties.admin === country ? 'black' : 'red'
+          d.properties.admin === country ? 'blue' : 'rgb(60, 60, 60)'
         )
-        .style('stroke', 'rgb(250, 200, 250)')
-        .style('stroke-width', 2)
+        .style('stroke', 'white')
+        .style('stroke-width', 0.4)
         .on('click', function (d, i) {
           console.log(i.properties.admin);
           handle();

@@ -26,7 +26,7 @@ export default function MainCountry({width, height, country, provinceName}) {
       .append('svg')
       .attr('width', `${height}px`)
       .attr('height', `${width}px`)
-      .style('border', '2px solid black')
+      // .style('border', '2px solid black')
       .append('g');
 
     //to add background color
@@ -34,7 +34,7 @@ export default function MainCountry({width, height, country, provinceName}) {
       .append('rect')
       .attr('width', '100%')
       .attr('height', '100%')
-      .attr('fill', 'rgb(235, 240, 220)');
+      .attr('fill', 'rgb(65, 83, 83)');
 
     var projection = d3
       .geoConicConformal()
@@ -93,10 +93,11 @@ export default function MainCountry({width, height, country, provinceName}) {
         //   .attr('class', 'municipality')
         .attr('d', svgpath)
         .style('fill', 'black')
-        .style('stroke', 'rgb(250, 200, 250)')
-        .style('stroke-width', 2)
+        .style('stroke', 'white')
+        .style('fill', 'rgb(30, 10, 10)')
+        .style('stroke-width', 1)
         .on('mouseover', function (d, i) {
-          d3.select(this).style('fill-opacity', 0.4);
+          d3.select(this).style('fill', 'rgb(60, 60, 60)');
           console.log(i.properties);
           //   var mouse = d3.mouse(this);
           //for adding the flags
@@ -110,7 +111,7 @@ export default function MainCountry({width, height, country, provinceName}) {
             .attr('xlink:href', `data/pflags/${i.properties.name}.png`);
         })
         .on('mouseout', function (d, i) {
-          d3.select(this).style('fill-opacity', 1);
+          d3.select(this).style('fill', 'rgb(30, 10, 10)');
         })
         .on('click', function (d, i) {
           // console.log(i.properties.admin);

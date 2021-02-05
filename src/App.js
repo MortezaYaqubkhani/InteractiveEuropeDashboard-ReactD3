@@ -112,6 +112,15 @@ class App extends Component {
     // this.setState({nameofcity: city});
   };
 
+  handleCity = (city) => {
+    city = city;
+    this.setState({city});
+    console.log(city);
+    //to change the main window map
+    this.setState({mainWindow: 'cityMap'});
+    // this.setState({nameofcity: city});
+  };
+
   handleSmallWorld = () => {
     //set the main window
     this.setState({mainWindow: 'worldMap'});
@@ -132,7 +141,7 @@ class App extends Component {
     const window = {width: this.state.width, height: this.state.height};
     const country = this.state.country;
     const province = this.state.province;
-
+    const city = this.state.city;
     const mainWindow = this.state.mainWindow;
     const mWidth = 490;
     const mHeight = 520;
@@ -148,7 +157,7 @@ class App extends Component {
         >
           <Row>
             <Col id="small-maps" xs={3}>
-              <Row id="world-small-map" className="border small">
+              <Row id="world-small-map" >
                 {country ? (
                   <SmallWorld
                     handleClick={this.handleSmallWorld}
@@ -167,7 +176,7 @@ class App extends Component {
                   width={window.width / 4}
                 /> */}
               </Row>
-              <Row id="country-small-map" className="border small">
+              <Row id="country-small-map" >
                 {country && province ? (
                   <SmallCountry
                     handleClick={this.handleSmallCountry}
@@ -180,15 +189,21 @@ class App extends Component {
                   <p>{province}</p>
                 )}
               </Row>
-              <Row id="province-small-map" className="border small">
-                <SmallProvince
-                  city={this.state.nameofcity}
-                  height={1}
-                  width={window.width / 4}
-                />
+              <Row id="province-small-map" >
+                {city && province && country ? (
+                  <SmallProvince
+                    province={province}
+                    height={sHeight}
+                    width={sWidth}
+                    city={city}
+                    handleClick={this.handleSmallCountry}
+                  />
+                ) : (
+                  <p></p>
+                )}
               </Row>
             </Col>
-            <Col className="border world" xs={9}>
+            <Col className="world" xs={9}>
               {mainWindow === 'worldMap' ? (
                 <MainWorld
                   height={mHeight}
@@ -205,6 +220,7 @@ class App extends Component {
               ) : (
                 <MainProvince
                   cityName={this.handleCity}
+                  province={province}
                   height={mHeight}
                   width={mWidth}
                 />

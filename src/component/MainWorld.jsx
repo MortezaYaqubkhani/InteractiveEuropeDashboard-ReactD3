@@ -20,7 +20,7 @@ export default function MainWorld({width, height, countryName}) {
       .append('svg')
       .attr('width', `${height}px`)
       .attr('height', `${width}px`)
-      .style('border', '2px solid black')
+      // .style('border', '2px solid black')
       .append('g');
 
     //to add background color
@@ -29,7 +29,7 @@ export default function MainWorld({width, height, countryName}) {
       .attr('width', '100%')
       .attr('height', '100%')
       .attr('fill', 'rgb(65, 83, 83)');
-//rgb(235, 240, 220) 
+    //rgb(235, 240, 220)
     let mapfeatuer = {};
     d3.json('data/europe.json').then((map) => {
       const bounding_box = turf.bbox(map);
@@ -39,6 +39,12 @@ export default function MainWorld({width, height, countryName}) {
         700,
         [height / 2 + 270, width / 2 - 50]
       );
+
+      d3.select('svgRef.current')
+        .append('div')
+        .attr('id', 'tooltip')
+        .attr('style', 'position: absolute; opacity: 0;');
+
 
       //to load a file successfully it's coordinates should be transfered to wgs84 4326
       mapsvg
@@ -55,6 +61,9 @@ export default function MainWorld({width, height, countryName}) {
         .on('mouseover', function (d, i) {
           d3.select(this).style('fill', 'rgb(60, 60, 60)');
           console.log(i.properties.postal);
+          d3.select('#tooltip').style('opacity', 1).text(i.properties.postal)
+
+
           //   var mouse = d3.mouse(this);
           //for adding the flags
           mapsvg

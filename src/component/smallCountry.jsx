@@ -25,7 +25,7 @@ export default function SmallCountry({
       .append('svg')
       .attr('width', `${width}px`)
       .attr('height', `${height}px`)
-      .style('border', '2px solid black')
+      // .style('border', '2px solid black')
       .append('g');
 
     //to add background color
@@ -33,7 +33,7 @@ export default function SmallCountry({
       .append('rect')
       .attr('width', '100%')
       .attr('height', '100%')
-      .attr('fill', 'rgb(235, 240, 220)');
+      .attr('fill', 'rgb(65, 83, 83)');
 
     var projection = d3
       .geoConicConformal()
@@ -58,10 +58,10 @@ export default function SmallCountry({
         //   .attr('class', 'municipality')
         .attr('d', svgpath)
         .style('fill', (d, i) =>
-          d.properties.name === province ? 'black' : 'red'
+          d.properties.name === province ? 'blue' : 'rgb(60, 60, 60)'
         )
-        .style('stroke', 'rgb(250, 200, 250)')
-        .style('stroke-width', 2)
+        .style('stroke', 'white')
+        .style('stroke-width', 0.5)
         .on('click', function (d, i) {
           console.log(i.properties.admin);
           handle();

@@ -22,7 +22,7 @@ class MainProvince extends Component {
     //   .catch((err) => console.log(err.message));
     const handle = (name) => {
       console.log(name);
-      this.handleclick(name);
+      this.props.cityName(name);
     };
     if ('ResizeObserver' in window) {
       this.observe(ResizeObserver);
@@ -53,7 +53,7 @@ class MainProvince extends Component {
       .append('svg')
       .attr('width', `${height}px`)
       .attr('height', `${width}px`)
-      .style('border', '2px solid black')
+      // .style('border', '2px solid black')
       .append('g');
 
     //to add background color
@@ -61,7 +61,7 @@ class MainProvince extends Component {
       .append('rect')
       .attr('width', '100%')
       .attr('height', '100%')
-      .attr('fill', 'rgb(235, 240, 220)');
+      .attr('fill', 'rgb(65, 83, 83)');
 
       var projection = d3
       .geoConicConformal()
@@ -85,19 +85,20 @@ class MainProvince extends Component {
       .append('path')
       //   .attr('class', 'municipality')
       .attr('d', svgpath)
-      .style('fill', 'black')
-      .style('stroke', 'rgb(250, 200, 250)')
-      .style('stroke-width', 2)
+      .style('fill', 'rgb(30, 10, 10)')
+      .style('stroke', 'white')
+      .style('stroke-width', 1)
       //mouse events
       .on('mouseover', function (d, i) {
-        d3.select(this).style('fill', 'red');
-        handle(i.properties.gm_naam);
+        d3.select(this).style('fill', 'rgb(60, 60, 60)');
+        
       })
       .on('mouseout', function (d, i) {
-        d3.select(this).style('fill', 'white');
+        d3.select(this).style('fill', 'rgb(30, 10, 10)');
       })
       .on('click', function (d, i) {
         console.log(i.properties.gm_naam);
+        handle(i.properties.gm_naam)
       });
 
     // provinceMap();
