@@ -19,6 +19,7 @@ import SmallWorld from './component/smallWorld';
 import MainCountry from './component/mainCountry';
 import SmallCountry from './component/smallCountry';
 import BarChart from './component/barChart';
+import PieChart from './component/pieChart';
 
 class App extends Component {
   constructor(props) {
@@ -232,6 +233,9 @@ class App extends Component {
           </Row>
 
           <Row >
+            <Col xs={3} >
+              <PieChart width={sWidth} height={sHeight} />
+            </Col>
             <Col className="chart">
               <BarChart width={cWidth} height={cHeight} />
             </Col>
