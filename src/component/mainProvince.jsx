@@ -75,6 +75,16 @@ class MainProvince extends Component {
     projection.fitSize([height, width], map);
 
 
+    const data = [{a: 'b', c: 1}, {a: 'b', c: 1}, {a: 'b', c: 1}, {a: 'b', c: 1}]
+    
+    // const x = d3.scaleBand()
+    // .domain(data.map(d => d.a))
+    // .range([10, width - 10])
+    // .padding(0.1)
+
+    // console.log(x)
+
+
 
 
     mapsvg
@@ -91,6 +101,7 @@ class MainProvince extends Component {
       //mouse events
       .on('mouseover', function (d, i) {
         d3.select(this).style('fill', 'rgb(60, 60, 60)');
+        // console.log(x('Russia'))
         
       })
       .on('mouseout', function (d, i) {

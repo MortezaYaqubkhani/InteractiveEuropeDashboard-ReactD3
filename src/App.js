@@ -18,6 +18,7 @@ import MainWorld from './component/MainWorld';
 import SmallWorld from './component/smallWorld';
 import MainCountry from './component/mainCountry';
 import SmallCountry from './component/smallCountry';
+import BarChart from './component/barChart';
 
 class App extends Component {
   constructor(props) {
@@ -147,6 +148,8 @@ class App extends Component {
     const mHeight = 520;
     const sWidth = 170;
     const sHeight = 160;
+    const cWidth = 660;
+    const cHeight = 160;
 
     return (
       <div className="App">
@@ -157,7 +160,7 @@ class App extends Component {
         >
           <Row>
             <Col id="small-maps" xs={3}>
-              <Row id="world-small-map" >
+              <Row id="world-small-map">
                 {country ? (
                   <SmallWorld
                     handleClick={this.handleSmallWorld}
@@ -176,7 +179,7 @@ class App extends Component {
                   width={window.width / 4}
                 /> */}
               </Row>
-              <Row id="country-small-map" >
+              <Row id="country-small-map">
                 {country && province ? (
                   <SmallCountry
                     handleClick={this.handleSmallCountry}
@@ -189,7 +192,7 @@ class App extends Component {
                   <p>{province}</p>
                 )}
               </Row>
-              <Row id="province-small-map" >
+              <Row id="province-small-map">
                 {city && province && country ? (
                   <SmallProvince
                     province={province}
@@ -228,18 +231,9 @@ class App extends Component {
             </Col>
           </Row>
 
-          <Row className="border">
-            <Col className="border small" xs={3}>
-              {this.state.nameofcity}
-            </Col>
-            <Col className="border small" xs={3}>
-              province
-            </Col>
-            <Col className="border small" xs={3}>
-              {window.height}
-            </Col>
-            <Col className="border small" xs={3} border="primary">
-              {window.width}
+          <Row >
+            <Col className="chart">
+              <BarChart width={cWidth} height={cHeight} />
             </Col>
           </Row>
         </Container>

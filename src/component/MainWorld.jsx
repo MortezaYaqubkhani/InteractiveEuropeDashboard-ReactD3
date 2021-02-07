@@ -45,7 +45,6 @@ export default function MainWorld({width, height, countryName}) {
         .attr('id', 'tooltip')
         .attr('style', 'position: absolute; opacity: 0;');
 
-
       //to load a file successfully it's coordinates should be transfered to wgs84 4326
       mapsvg
         .selectAll('path')
@@ -61,10 +60,7 @@ export default function MainWorld({width, height, countryName}) {
         .on('mouseover', function (d, i) {
           d3.select(this).style('fill', 'rgb(60, 60, 60)');
           console.log(i.properties.postal);
-          d3.select('#tooltip').style('opacity', 1).text(i.properties.postal)
-
-
-          //   var mouse = d3.mouse(this);
+          tooltip.style('visibility', 'visible').text(i.properties.admin);
           //for adding the flags
           mapsvg
             .append('svg:image')
@@ -78,13 +74,36 @@ export default function MainWorld({width, height, countryName}) {
               `https://www.countryflags.io/${i.properties.wb_a2.toLowerCase()}/shiny/64.png`
             );
         })
+        .on('mousemove', (i, d) => {
+          tooltip
+            .style('top', i.clientY - 10 + 'px')
+            .style('left', i.clientX + 10 + 'px')
+            .text(d.properties.admin);
+        })
         .on('mouseout', function (d, i) {
           d3.select(this).style('fill', 'rgb(30, 10, 10)');
+          tooltip.style('visibility', 'hidden');
         })
         .on('click', function (d, i) {
           // console.log(i.properties.admin);
           handleClick(i.properties.admin);
         });
+
+      //define the tooltip
+      const tooltip = d3
+        .select('body')
+        .append('div')
+        .style('position', 'absolute')
+        .style('font-family', "'Open Sans', sans-serif")
+        .style('font-size', '15px')
+        .style('z-index', '10')
+        .style('background-color', '#A7CDFA')
+        .style('color', '#B380BA')
+        .style('border', 'solid')
+        .style('border-color', '#A89ED6')
+        .style('padding', '5px')
+        .style('border-radius', '2px')
+        .style('visibility', 'hidden');
     });
   }, [height, width]);
 
