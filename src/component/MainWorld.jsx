@@ -3,35 +3,59 @@ import * as d3 from 'd3';
 import * as turf from '@turf/turf';
 import PathProjection from './tools/pathProjection';
 
-export default function MainWorld({width, height, countryName}) {
+export default function MainWorld({
+  width,
+  height,
+  handleCountryName,
+  handleCountryOver,
+  selectedCountry,
+}) {
   const svgRef = useRef();
 
   useEffect(() => {
     const handleClick = (admin) => {
-      console.log(admin);
-      countryName(admin);
+      handleCountryName(admin);
+      handleCountryOver('');
     };
+
+    console.log(selectedCountry);
+    const mouseOver = (country, tooltip) => {
+      handleCountryOver(country);
+      tooltip.style('visibility', 'visible').text(country);
+    };
+
+    const mouseOut = (tooltip) => {
+      tooltip.style('visibility', 'hidden');
+    };
+
+    const mouseMove = (i, country, tooltip) => {
+      tooltip
+        .style('top', i.clientY - 10 + 'px')
+        .style('left', i.clientX + 10 + 'px')
+        .text(country);
+    };
+
     //removing svg
-    d3.select(svgRef.current).select('*').remove();
     console.log(height, width);
     //draw svg
     const mapsvg = d3
-      .select(svgRef.current)
-      .append('svg')
-      .attr('width', `${height}px`)
-      .attr('height', `${width}px`)
-      // .style('border', '2px solid black')
-      .append('g');
-
+    .select(svgRef.current)
+    .append('svg')
+    .attr('width', `${height}px`)
+    .attr('height', `${width}px`)
+    // .style('border', '2px solid black')
+    .append('g');
+    
     //to add background color
     mapsvg
-      .append('rect')
-      .attr('width', '100%')
-      .attr('height', '100%')
-      .attr('fill', 'rgb(65, 83, 83)');
+    .append('rect')
+    .attr('width', '100%')
+    .attr('height', '100%')
+    .attr('fill', 'rgb(65, 83, 83)');
     //rgb(235, 240, 220)
     let mapfeatuer = {};
     d3.json('data/europe.json').then((map) => {
+      d3.select(svgRef.current).select('*').remove();
       const bounding_box = turf.bbox(map);
       console.log(map);
       const svgpath = PathProjection(
@@ -54,13 +78,15 @@ export default function MainWorld({width, height, countryName}) {
         .append('path')
         //   .attr('class', 'municipality')
         .attr('d', svgpath)
-        .style('fill', 'rgb(30, 10, 10)')
+        .style('fill', (d, i) =>
+          d.properties.admin === selectedCountry ? 'blue' : 'rgb(30, 10, 10)'
+        )
+        
         .style('stroke', 'white')
         .style('stroke-width', 1)
-        .on('mouseover', function (d, i) {
-          d3.select(this).style('fill', 'rgb(60, 60, 60)');
-          console.log(i.properties.postal);
-          tooltip.style('visibility', 'visible').text(i.properties.admin);
+        .on('mouseover', function (i, d) {
+          d3.select(this).style('fill', 'rgb(80, 60, 60)');
+          mouseOver(d.properties.admin, tooltip);
           //for adding the flags
           mapsvg
             .append('svg:image')
@@ -71,22 +97,19 @@ export default function MainWorld({width, height, countryName}) {
             // .attr('xlink:href', "data/download.jpg");
             .attr(
               'xlink:href',
-              `https://www.countryflags.io/${i.properties.wb_a2.toLowerCase()}/shiny/64.png`
+              `https://www.countryflags.io/${d.properties.wb_a2.toLowerCase()}/shiny/64.png`
             );
         })
         .on('mousemove', (i, d) => {
-          tooltip
-            .style('top', i.clientY - 10 + 'px')
-            .style('left', i.clientX + 10 + 'px')
-            .text(d.properties.admin);
+          mouseMove(i, d.properties.admin, tooltip);
         })
-        .on('mouseout', function (d, i) {
+        .on('mouseout', function (i, d) {
           d3.select(this).style('fill', 'rgb(30, 10, 10)');
-          tooltip.style('visibility', 'hidden');
+          mouseOut(tooltip);
         })
-        .on('click', function (d, i) {
+        .on('click', function (i, d) {
           // console.log(i.properties.admin);
-          handleClick(i.properties.admin);
+          handleClick(d.properties.admin);
         });
 
       //define the tooltip
@@ -105,7 +128,7 @@ export default function MainWorld({width, height, countryName}) {
         .style('border-radius', '2px')
         .style('visibility', 'hidden');
     });
-  }, [height, width]);
+  }, [height, width, selectedCountry]);
 
   return <div id="svg-chart" ref={svgRef}></div>;
 }

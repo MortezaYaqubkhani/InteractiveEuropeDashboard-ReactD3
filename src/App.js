@@ -31,6 +31,9 @@ class App extends Component {
     mainWindow: 'worldMap',
     worldData: {},
     country: '',
+    countryOverMap: '',
+    countryOverPiechart: '',
+    countryOverBarchart: '',
     province: '',
     city: '',
     // city: {name: '', data: ''},
@@ -104,6 +107,24 @@ class App extends Component {
     this.setState({mainWindow: 'countryMap'});
     // this.setState({nameofcity: city});
   };
+
+  handleCountryOverMap = (countryOverMap) => {
+    countryOverMap = countryOverMap;
+    this.setState({countryOverMap});
+    console.log(this.state.countryOverMap);
+    //to change the main window map
+    // this.setState({mainWindow: 'countryMap'});
+    // this.setState({nameofcity: city});
+  }
+
+  handleCountryOverBarchart = (countryOverBarchart) => {
+    countryOverBarchart = countryOverBarchart;
+    this.setState({countryOverBarchart});
+    console.log(this.state.countryOverBarchart);
+    //to change the main window map
+    // this.setState({mainWindow: 'countryMap'});
+    // this.setState({nameofcity: city});
+  }
 
   handleProvince = (province) => {
     province = province;
@@ -212,7 +233,10 @@ class App extends Component {
                 <MainWorld
                   height={mHeight}
                   width={mWidth}
-                  countryName={this.handleCountry}
+                  handleCountryName={this.handleCountry}
+                  handleCountryOver={this.handleCountryOverMap}
+                  selectedCountry={this.state.countryOverBarchart}
+                  // overcountry={this.state.countryOver}
                 />
               ) : mainWindow === 'countryMap' ? (
                 <MainCountry
@@ -237,7 +261,7 @@ class App extends Component {
               <PieChart width={sWidth} height={sHeight} />
             </Col>
             <Col className="chart">
-              <BarChart width={cWidth} height={cHeight} />
+              <BarChart width={cWidth} height={cHeight} selectedCountry={this.state.countryOverMap} handleBarchartOver={this.handleCountryOverBarchart} />
             </Col>
           </Row>
         </Container>

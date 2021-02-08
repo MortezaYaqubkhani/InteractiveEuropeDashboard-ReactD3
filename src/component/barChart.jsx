@@ -1,39 +1,44 @@
 import React, {useState, useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 
-export default function BarChart({width, height}) {
+export default function BarChart({width, height, selectedCountry, handleBarchartOver}) {
   const svgRef = useRef();
   const margin = {left: 15, right: 15, bottom: 45, top: 15};
 
+  //to update barchart
+  
   useEffect(() => {
-    //to update barchart
-    d3.select(svgRef.current).select('*').remove();
 
+    const mouseOver = (i, country, tooltip) => {
+      tooltip.style('visibility', 'visible').text();
+      handleBarchartOver(country)
+    }
     //to read the data
     d3.json('data/europe.json').then((data) => {
-      //creating the range for the x values
-      const x = d3
-        .scaleBand()
-        .domain(data.features.map((d) => d.properties.admin))
-        .range([margin.left, width - margin.right])
-        .padding(0.1);
-
-      //creating the range for the y values
-      const y = d3
-        .scaleLinear()
-        .domain([0, d3.max(data.features, (d) => d.properties.pop_est)])
-        .nice()
-        .range([height - margin.bottom, margin.top]);
-
-      //creating the main svg element
-      const svg = d3
-        .select(svgRef.current)
-        .append('svg')
-        .attr('viewBox', [0, 0, width, height]);
-
-      //call tooltip
-      // tooltip;
-
+      d3.select(svgRef.current).select('*').remove();
+    //creating the range for the x values
+    const x = d3
+    .scaleBand()
+    .domain(data.features.map((d) => d.properties.admin))
+    .range([margin.left, width - margin.right])
+    .padding(0.1);
+    
+    //creating the range for the y values
+    const y = d3
+    .scaleLinear()
+    .domain([0, d3.max(data.features, (d) => d.properties.pop_est)])
+    .nice()
+    .range([height - margin.bottom, margin.top]);
+    
+    //creating the main svg element
+    const svg = d3
+    .select(svgRef.current)
+    .append('svg')
+    .attr('viewBox', [0, 0, width, height]);
+    
+    //call tooltip
+    // tooltip;
+    
       //creating barchart elements
       const bar = svg
         .append('g')
@@ -47,10 +52,13 @@ export default function BarChart({width, height}) {
         .attr('y', (d) => y(d.properties.pop_est))
         .attr('height', (d) => y(0) - y(d.properties.pop_est))
         .attr('width', x.bandwidth())
+        .attr('fill', (d) => d.properties.admin === selectedCountry? 'red': 'blue')
+        // .attr('fill', (d,i) => d.properties.admin === selectedCountry? '#FDE5BD': 'white')
         .text((d) => d)
         .on('mouseover', function (i, d) {
-          tooltip.style('visibility', 'visible').text(d.properties.admin);
+          
           d3.select(this).attr('fill', '#FDE5BD');
+          mouseOver(i, d.properties.admin, tooltip)
         })
         .on('mousemove', (i, d) => {
           tooltip
@@ -115,7 +123,7 @@ export default function BarChart({width, height}) {
         .style('border-radius', '2px')
         .style('visibility', 'hidden');
     });
-  }, [height, width]);
+  }, [height, width, selectedCountry]);
 
   return <div id="svg-chart" ref={svgRef}></div>;
 }
