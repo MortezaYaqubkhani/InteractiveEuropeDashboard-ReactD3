@@ -50,15 +50,15 @@ class App extends Component {
   };
   componentDidMount(error, info) {
     //loading the world map data
-    d3.json('component/data/overijssel.json')
-      .then(function (data) {
-        // const map = data;
-        console.log(data);
-        // console.log(typeof map);
-        // console.log(map);
-        // return map;
-      })
-      .catch((err) => console.log(err.message));
+    // d3.json('component/data/overijssel.json')
+    //   .then(function (data) {
+    //     // const map = data;
+    //     console.log(data);
+    //     // console.log(typeof map);
+    //     // console.log(map);
+    //     // return map;
+    //   })
+    //   .catch((err) => console.log(err.message));
     this.setState({worldData: datamap1});
     // async function loadWorldData() {
     //   return await d3.json('component/data/overijssel.json');

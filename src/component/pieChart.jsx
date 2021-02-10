@@ -95,15 +95,19 @@ export default function Piechart({width, height, dat}) {
     const pieGenerator = d3
       .pie()
       .padAngle(0)
-      .value((d) => d.count)
+      .value((d) => {
+        console.log(d.count)
+        return d.count
+      })
       .sort(null);
 
     //get information from data
     dataa.forEach(function (d) {
       d.count = +d.count; // calculate count as we iterate through the data
       d.enabled = true; // add enabled property to track which entries are checked
+      console.log(d.count)
     });
-
+    console.log(dataa)
     // creating the chart
     var pathh = svg
       .selectAll('path') // select all path elements inside the svg. specifically the 'g' element. they don't exist yet but they will be created below

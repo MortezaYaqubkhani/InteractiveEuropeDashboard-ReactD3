@@ -36,7 +36,7 @@ export default function MainWorld({
     };
 
     //removing svg
-    console.log(height, width);
+    // console.log(height, width);
     //draw svg
     const mapsvg = d3
     .select(svgRef.current)
@@ -54,8 +54,9 @@ export default function MainWorld({
     .attr('fill', 'rgb(65, 83, 83)');
     //rgb(235, 240, 220)
     let mapfeatuer = {};
+    // selectedCountry !== '' ? d3.select(svgRef.current).select('*').remove() :console.log('first')  ;
     d3.json('data/europe.json').then((map) => {
-      d3.select(svgRef.current).select('*').remove();
+      selectedCountry === '' ? console.log('first') : d3.select(svgRef.current).select('*').remove();
       const bounding_box = turf.bbox(map);
       console.log(map);
       const svgpath = PathProjection(
@@ -78,6 +79,7 @@ export default function MainWorld({
         .append('path')
         //   .attr('class', 'municipality')
         .attr('d', svgpath)
+        // .style('fill', 'white')
         .style('fill', (d, i) =>
           d.properties.admin === selectedCountry ? 'blue' : 'rgb(30, 10, 10)'
         )
