@@ -7,14 +7,27 @@ export default function MainCountry({width, height, country, provinceName}) {
   const svgRef = useRef();
 
   useEffect(() => {
-    // const handle = (admin) => {
-    //   console.log(admin)
-    //   countryName(admin)
-    // }
-    //removing svg
-    const handleClick = (province) => {
-      console.log(province);
+
+    const mouseOver = (province, tooltip) => {
+      // handleCountryOver(country);
+      console.log('tol')
+      tooltip.style('visibility', 'visible').text(province);
+    };
+
+    const mouseMove = (i, country, tooltip) => {
+      tooltip
+        .style('top', i.clientY - 10 + 'px')
+        .style('left', i.clientX + 10 + 'px')
+        .text(country);
+    };
+
+    const mouseOut = (tooltip) => {
+      tooltip.style('visibility', 'hidden');
+    };
+
+    const handleClick = (province, tooltip) => {
       provinceName(province);
+      tooltip.style('visibility', 'hidden');
     };
 
     d3.select(svgRef.current).select('*').remove();
@@ -98,9 +111,8 @@ export default function MainCountry({width, height, country, provinceName}) {
         .style('stroke-width', 1)
         .on('mouseover', function (d, i) {
           d3.select(this).style('fill', 'rgb(60, 60, 60)');
-          console.log(i.properties);
-          //   var mouse = d3.mouse(this);
-          //for adding the flags
+          mouseOver(i.properties.name, tooltip);
+          console.log(i.properties.name)
           mapsvg
             .append('svg:image')
             .attr('x', 10)
@@ -110,18 +122,33 @@ export default function MainCountry({width, height, country, provinceName}) {
             // .attr('xlink:href', "data/download.jpg");
             .attr('xlink:href', `data/pflags/${i.properties.name}.png`);
         })
+        .on('mousemove', (i, d) => {
+          mouseMove(i, d.properties.name, tooltip);
+        })
         .on('mouseout', function (d, i) {
           d3.select(this).style('fill', 'rgb(30, 10, 10)');
+          mouseOut(tooltip);
         })
         .on('click', function (d, i) {
           // console.log(i.properties.admin);
-          handleClick(i.properties.name);
+          handleClick(i.properties.name, tooltip);
         });
-      // .on('click', function (d, i) {
-      //   // console.log(i.properties.admin);
-      //   handle(i.properties.admin);
 
-      // });
+        const tooltip = d3
+        .select('body')
+        .append('div')
+        .style('position', 'absolute')
+        .style('font-family', "'Open Sans', sans-serif")
+        .style('font-size', '15px')
+        .style('z-index', '10')
+        .style('background-color', 'white')
+        .style('color', 'black')
+        .style('border', 'solid')
+        .style('border-color', '#A89ED6')
+        .style('padding', '5px')
+        .style('opacity', 0.9)
+        .style('border-radius', '2px')
+        .style('visibility', 'hidden');
     });
   }, [height, width]);
 

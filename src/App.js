@@ -160,6 +160,14 @@ class App extends Component {
     // this.setState({nameofcity: city});
   };
 
+  handleSmallProvince = () => {
+    //set the main window
+    this.setState({mainWindow: 'provinceMap'});
+    //earse the small world window
+    this.setState({city: ''});
+    // this.setState({nameofcity: city});
+  };
+
   render() {
     const window = {width: this.state.width, height: this.state.height};
     const country = this.state.country;
@@ -221,7 +229,7 @@ class App extends Component {
                     height={sHeight}
                     width={sWidth}
                     city={city}
-                    handleClick={this.handleSmallCountry}
+                    handleClick={this.handleSmallProvince}
                   />
                 ) : (
                   <p></p>

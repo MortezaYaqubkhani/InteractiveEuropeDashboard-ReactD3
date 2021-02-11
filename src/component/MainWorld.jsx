@@ -13,9 +13,10 @@ export default function MainWorld({
   const svgRef = useRef();
 
   useEffect(() => {
-    const handleClick = (admin) => {
+    const handleClick = (admin, tooltip) => {
       handleCountryName(admin);
       handleCountryOver('');
+      tooltip.style('visibility', 'hidden');
     };
 
     console.log(selectedCountry);
@@ -111,7 +112,7 @@ export default function MainWorld({
         })
         .on('click', function (i, d) {
           // console.log(i.properties.admin);
-          handleClick(d.properties.admin);
+          handleClick(d.properties.admin, tooltip);
         });
 
       //define the tooltip
@@ -122,11 +123,12 @@ export default function MainWorld({
         .style('font-family', "'Open Sans', sans-serif")
         .style('font-size', '15px')
         .style('z-index', '10')
-        .style('background-color', '#A7CDFA')
-        .style('color', '#B380BA')
+        .style('background-color', 'white')
+        .style('color', 'black')
         .style('border', 'solid')
         .style('border-color', '#A89ED6')
         .style('padding', '5px')
+        .style('opacity', 0.9)
         .style('border-radius', '2px')
         .style('visibility', 'hidden');
     });
