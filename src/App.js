@@ -17,9 +17,11 @@ import SmallProvince from './component/smallProvince';
 import MainWorld from './component/MainWorld';
 import SmallWorld from './component/smallWorld';
 import MainCountry from './component/mainCountry';
+import MainCity from './component/mainCity';
 import SmallCountry from './component/smallCountry';
 import BarChart from './component/barChart';
 import PieChart from './component/pieChart';
+import CityChart from './component/cityChart';
 
 class App extends Component {
   constructor(props) {
@@ -115,7 +117,7 @@ class App extends Component {
     //to change the main window map
     // this.setState({mainWindow: 'countryMap'});
     // this.setState({nameofcity: city});
-  }
+  };
 
   handleCountryOverBarchart = (countryOverBarchart) => {
     countryOverBarchart = countryOverBarchart;
@@ -124,7 +126,7 @@ class App extends Component {
     //to change the main window map
     // this.setState({mainWindow: 'countryMap'});
     // this.setState({nameofcity: city});
-  }
+  };
 
   handleProvince = (province) => {
     province = province;
@@ -132,15 +134,6 @@ class App extends Component {
     console.log(province);
     //to change the main window map
     this.setState({mainWindow: 'provinceMap'});
-    // this.setState({nameofcity: city});
-  };
-
-  handleCity = (city) => {
-    city = city;
-    this.setState({city});
-    console.log(city);
-    //to change the main window map
-    this.setState({mainWindow: 'cityMap'});
     // this.setState({nameofcity: city});
   };
 
@@ -168,6 +161,14 @@ class App extends Component {
     // this.setState({nameofcity: city});
   };
 
+  handleCity = (city) => {
+    city = city;
+    this.setState({city});
+    console.log(city);
+    //to change the main window map
+    this.setState({mainWindow: 'cityMap'});
+    // this.setState({nameofcity: city});
+  };
   render() {
     const window = {width: this.state.width, height: this.state.height};
     const country = this.state.country;
@@ -180,6 +181,8 @@ class App extends Component {
     const sHeight = 160;
     const cWidth = 660;
     const cHeight = 160;
+    const cityWidth = 245;
+    const cityHeight = 255;
 
     return (
       <div className="App">
@@ -253,23 +256,37 @@ class App extends Component {
                   country={country}
                   provinceName={this.handleProvince}
                 />
-              ) : (
+              ) : mainWindow === 'provinceMap' ? (
                 <MainProvince
                   cityName={this.handleCity}
                   province={province}
                   height={mHeight}
                   width={mWidth}
                 />
+              ) : (
+
+                  <MainCity
+                    height={290}
+                    width={270}
+                    country={country}
+                    provinceName={this.handleProvince}
+                  />
+
               )}
             </Col>
           </Row>
 
-          <Row >
-            <Col xs={3} >
+          <Row>
+            <Col xs={3}>
               <PieChart width={sWidth} height={sHeight} />
             </Col>
             <Col className="chart">
-              <BarChart width={cWidth} height={cHeight} selectedCountry={this.state.countryOverMap} handleBarchartOver={this.handleCountryOverBarchart} />
+              <BarChart
+                width={cWidth}
+                height={cHeight}
+                selectedCountry={this.state.countryOverMap}
+                handleBarchartOver={this.handleCountryOverBarchart}
+              />
             </Col>
           </Row>
         </Container>
