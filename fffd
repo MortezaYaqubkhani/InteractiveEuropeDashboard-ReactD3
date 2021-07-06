@@ -1,0 +1,24 @@
+[33m0d01fb2[m[33m ([m[1;36mHEAD -> [m[1;32mworkWithReactStyle[m[33m)[m the city map was added, tooltips are working fine
+[33me3eabfe[m city map added successfully
+[33m22e3fe4[m city map added successfully
+[33m7ff3ea2[m tooltips has been added successfully
+[33mc8b5a71[m the diagram is working well
+[33m587dbc1[m there is an interaction between barchart and map
+[33m4f1fab9[m adding interactive piechart
+[33m01d160e[m interaction and tooltips added to the main barchart and map
+[33m13ee57d[m I have to work on the tooltips
+[33m01c907b[m i am working on the front end of it, everything seems good
+[33m4578b4b[m the projection problem seems to be solved
+[33mdefacbc[m the world maps are done!
+[33m7fa0eed[m the centeroid is working properly
+[33ma0cd5bb[m the issue regarding sync is solved
+[33m0d77703[m there is two maps in two different windowses
+[33m49738cf[m resize observer is working perfectly
+[33m874d6fb[m the first changes to make an official map page
+[33mbf08f81[m[33m ([m[1;31morigin/workWithReactStyle[m[33m, [m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m the click on map is working
+[33m9f6d2c9[m adding functions to click
+[33m85dee75[m different files has been loaded successfully
+[33m1941ee1[m to be able to move everything and work on the clicks, try to put everything on the function for a simpler job
+[33m20afd00[m this is the version after adding basic interaction abilities to maps
+[33mca2b1f8[m first trials to load d3 maps in react
+[33m0c17dd4[m Initialize project using Create React App

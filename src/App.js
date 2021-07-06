@@ -277,10 +277,10 @@ class App extends Component {
           </Row>
 
           <Row>
-            <Col xs={3}>
+            <Col xs={2}>
               <PieChart width={sWidth} height={sHeight} />
             </Col>
-            <Col className="chart">
+            <Col xs={10}>
               <BarChart
                 width={cWidth}
                 height={cHeight}

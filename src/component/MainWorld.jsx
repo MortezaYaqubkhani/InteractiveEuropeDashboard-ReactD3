@@ -55,9 +55,9 @@ export default function MainWorld({
     .attr('fill', 'rgb(65, 83, 83)');
     //rgb(235, 240, 220)
     let mapfeatuer = {};
+    selectedCountry === '' ? console.log('first') : d3.select(svgRef.current).select('*').remove();
     // selectedCountry !== '' ? d3.select(svgRef.current).select('*').remove() :console.log('first')  ;
     d3.json('data/europe.json').then((map) => {
-      selectedCountry === '' ? console.log('first') : d3.select(svgRef.current).select('*').remove();
       const bounding_box = turf.bbox(map);
       console.log(map);
       const svgpath = PathProjection(

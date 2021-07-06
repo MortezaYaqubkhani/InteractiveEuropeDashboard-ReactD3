@@ -19,8 +19,8 @@ export default function BarChart({width, height, selectedCountry, handleBarchart
     //creating the range for the x values
     const x = d3
     .scaleBand()
-    .domain(data.features.map((d) => d.properties.admin))
-    .range([margin.left, width - margin.right])
+    .domain(data.features.map((d) => d.properties.abbrev))
+    .range([margin.left+45, width - margin.right + 10])
     .padding(0.1);
     
     //creating the range for the y values
@@ -34,7 +34,16 @@ export default function BarChart({width, height, selectedCountry, handleBarchart
     const svg = d3
     .select(svgRef.current)
     .append('svg')
-    .attr('viewBox', [0, 0, width, height]);
+    .attr('viewBox', [0, 0, width, height])
+    .style('background-color', 'rgb(242,242,242)');
+
+    svg.append("text")
+        .attr("x", (width / 2))             
+        .attr("y", 15 )
+        .attr("text-anchor", "middle")  
+        .style("font-size", "16px") 
+        .style("text-decoration", "underline")  
+        .text("Population");
     
     //call tooltip
     // tooltip;
@@ -48,7 +57,7 @@ export default function BarChart({width, height, selectedCountry, handleBarchart
         .enter()
         .append('rect')
         .style('mix-blend-mode', 'multiply')
-        .attr('x', (d) => x(d.properties.admin))
+        .attr('x', (d) => x(d.properties.abbrev))
         .attr('y', (d) => y(d.properties.pop_est))
         .attr('height', (d) => y(0) - y(d.properties.pop_est))
         .attr('width', x.bandwidth())
@@ -61,10 +70,11 @@ export default function BarChart({width, height, selectedCountry, handleBarchart
           mouseOver(i, d.properties.admin, tooltip)
         })
         .on('mousemove', (i, d) => {
+          console.log(d)
           tooltip
             .style('top', i.clientY - 10 + 'px')
             .style('left', i.clientX + 10 + 'px')
-            .text(d.properties.admin);
+            .html(d.properties.admin + "<br>" + d.properties.pop_est);
         })
         .on('mouseout', function (i, d) {
           tooltip.style('visibility', 'hidden');
@@ -75,7 +85,7 @@ export default function BarChart({width, height, selectedCountry, handleBarchart
       //xaxis element of the barchart
       const xAxis = (g) =>
         g
-          .attr('transform', `translate(0,${height - margin.bottom})`)
+          .attr('transform', `translate(0,${height - margin.bottom })`)
           .call(d3.axisBottom(x).tickSizeOuter(0));
 
       svg
@@ -94,18 +104,34 @@ export default function BarChart({width, height, selectedCountry, handleBarchart
       //yaxis element of the barchart
       const yAxis = (g) =>
         g
-          .attr('transform', `translate(${margin.left},0)`)
-          .call(d3.axisLeft(y))
-          .call((g) => g.select('.domain').remove());
+          .attr('transform', `translate(60,0)`)
+          .call(d3.axisRight(y))
 
-      const gy = svg
-        .append('g')
-        .call(yAxis)
-        .selectAll('text')
-        .attr('y', 0)
-        .attr('x', -30)
-        .attr('dy', '.35em')
-        .style('text-anchor', 'start');
+          svg
+          .append('g')
+          .attr('class', 'y axis')
+          // .attr('transform', `translate(${margin.left+50},0)`)
+          .call(yAxis)
+          // .call(yAxis)
+          .selectAll('text')
+          .attr('y', 0)
+          .attr('x', -59)
+          .attr('dy', '.35em')
+          // .attr('transform', 'rotate(90)')
+          .style('text-anchor', 'start');
+
+    //       .call((g) => g.select('.domain').remove());
+
+
+
+    //  svg
+    //     .append('g')
+    //     .call(yAxis)
+    //     .selectAll('text')
+    //     .attr('y', 0)
+    //     .attr('x', -30)
+    //     .attr('dy', '.35em')
+    //     .style('text-anchor', 'start');
 
       //to define the tooltip
       const tooltip = d3
@@ -115,10 +141,10 @@ export default function BarChart({width, height, selectedCountry, handleBarchart
         .style('font-family', "'Open Sans', sans-serif")
         .style('font-size', '15px')
         .style('z-index', '10')
-        .style('background-color', '#A7CDFA')
-        .style('color', '#B380BA')
+        .style('background-color', 'rgb(0,0,0)')
+        .style('color', 'rgb(255,250,250')
         .style('border', 'solid')
-        .style('border-color', '#A89ED6')
+        .style('border-color', 'rgb(255,255,255')
         .style('padding', '5px')
         .style('border-radius', '2px')
         .style('visibility', 'hidden');

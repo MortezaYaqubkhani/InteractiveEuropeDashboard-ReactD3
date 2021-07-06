@@ -501,7 +501,8 @@ const CityBarChart = () => {
             return function (t) {
               this.textContent = Math.round(i(t));
             };
-          });
+          })
+          .style('fill', 'rgb(255,255,255)');
 
         clipPath
           .transition()
@@ -579,27 +580,27 @@ const CityBarChart = () => {
     // inject to target DOM
     var chart = new SproutChart(svgRef.current, [
       {
-        name: 'apple',
+        name: 'Hotel',
         value: 10,
       },
       {
-        name: 'orange',
+        name: 'High-Education',
         value: 3,
       },
       {
-        name: 'watermelon',
+        name: 'Factory',
         value: 9,
       },
       {
-        name: 'banana',
+        name: 'Muesum',
         value: 5,
       },
       {
-        name: 'cherry',
+        name: 'Bank',
         value: 8,
       },
       {
-        name: 'others',
+        name: 'School',
         value: 19,
       },
     ]);
